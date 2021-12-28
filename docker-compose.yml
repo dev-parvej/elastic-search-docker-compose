@@ -1,0 +1,53 @@
+version: '3.0'
+
+services:
+    database:
+        image: mysql:latest
+        container_name: database
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        networks:
+            - els_test_networks
+        ports:
+            - ${DB_PORT}:${DB_PORT}
+        volumes:
+            - ./mysql/data:/var/lib/mysql
+    app:
+        build:
+            args:
+                user: parvej
+                uid: 11009
+            context: ./
+            dockerfile: Dockerfile
+        image: parvej-laravel-image
+        container_name: app
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        networks:
+            - els_test_networks
+
+    server:
+        image: nginx
+        container_name: server
+        restart: unless-stopped
+        ports:
+            - "8000:80"
+        volumes:
+            - ./:/var/www
+            - ./nginx/conf.d:/etc/nginx/conf.d/
+        networks:
+            - els_test_networks
+
+
+
+networks:
+    els_test_networks:
+        driver: bridge
