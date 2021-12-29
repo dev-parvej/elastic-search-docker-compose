@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
          Status::factory(20)->create();
          for ($i = 0; $i <= 1000; $i++) {
              dump($i);
-             Product::factory(1000)->create();
+             Product::factory(1000)->make();
          }
     }
 }
