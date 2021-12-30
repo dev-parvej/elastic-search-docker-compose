@@ -16,7 +16,7 @@ class ProductSeeder extends Seeder
     {
         for ($i = 0; $i <= 1000; $i++) {
             dump($i);
-            Product::query()->insert(Product::factory(1000)->make()->toArray());
+            Product::query()->insert(Product::factory(10000)->make()->toArray());
         }
     }
 }
